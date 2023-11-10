@@ -2,11 +2,14 @@
 import requests
 from bs4 import BeautifulSoup
 
+import database.comparisons as cp
+import database.operations as op
+
 def get_product_ml():
     # Melhorias pelo oq eu testei so mostra a primeira pagina com os produtos tem que tentar fazer um jeito de passar as paginas
     url_base = 'https://lista.mercadolivre.com.br/'
 
-    produto_nome = "rtx 4090"  # Nome do produto a ser pesquisado
+    produto_nome = "notebook i5"  # Nome do produto a ser pesquisado
 
     # Faz uma requisição HTTP para obter a página HTML
     response = requests.get(url_base + produto_nome) # https://lista.mercadolivre.com.br/ + o produto
@@ -41,6 +44,8 @@ def get_product_ml():
         # Encontra e imprime o preço do produto (considerando centavos)
         centavos = produto.find('span', attrs={'class': 'andes-money-amount ui-search-price__part ui-search-price__part--medium andes-money-amount--cents-superscript'})
         print('Preço do produto: R$', centavos.text)
+
+        op.add_element(titulo.text, centavos.text)
 
         # Imprime o contador
         print('Contador para quantidade de produtos encontrados:', i)
