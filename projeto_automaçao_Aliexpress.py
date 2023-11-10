@@ -1,59 +1,76 @@
-import requests
+import time
+import re
 from bs4 import BeautifulSoup
+from selenium import webdriver
 
-# Melhorias pelo oq eu testei so mostra a primeira pagina com os produtos tem que tentar fazer um jeito de passar as paginas
-
-# URL base do Mercado Livre
-
+# URL base do AliExpress
 url_base = 'https://pt.aliexpress.com/w/wholesale-.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
 
-produto_nome = "rx 580 8g elsa"  # Nome do produto a ser pesquisado
+produto_nome = "mause gamer"  # Nome do produto a ser pesquisado
+
+# Configuração do Selenium
+driver = webdriver.Chrome()
 
 # Faz uma requisição HTTP para obter a página HTML
 base_url = "https://pt.aliexpress.com/w/wholesale-{}-8g.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7"
 url = base_url.format(produto_nome)
-response = requests.get(url)
-print('\nURL da Busca ', url, '\n')
+
+# Abre a página no navegador controlado pelo Selenium
+driver.get(url)
+time.sleep(0.3)  # Aguarda um tempo para o carregamento inicial
+
+# Número de rolagens desejadas
+num_rolagens = 16  # Ajuste conforme necessário
+
+# Rolar a página gradualmente
+for _ in range(num_rolagens):
+    driver.execute_script("window.scrollBy(0, 500);")  # Rola a página para baixo em incrementos de 500 pixels
+    time.sleep(0.3)  # Aguarda um tempo entre as rolagens para dar tempo de carregar
+
+# Obtém o HTML da página atualizada após as rolagens
+page_source = driver.page_source
 
 # Cria um objeto BeautifulSoup para analisar o HTML
-site = BeautifulSoup(response.text, 'html.parser')
+site = BeautifulSoup(page_source, 'html.parser')
 
 # Encontra todos os produtos na página usando a classe específica
-produtos = site.findAll('div', attrs={'class': 'list--galleryWrapper--29HRJT4'})
+produtos = site.find_all('div', class_='list--gallery--C2f2tvm search-item-card-wrapper-gallery')
 
-print(site.text)
-
-valor = site.find('span', attrs={'class': 'a2g0o.productlist.main.i2.52945fe7XFQBdO'})
-print('Preço do produto: R$', valor.text)
-
-# # Inicializa um contador
+# Inicializa um contador
 i = 0
 
 # Itera sobre cada produto encontrado
-# for produto in produtos:
-#     # Incrementa o contador
-#     i += 1
-    
-#     # # Encontra e imprime o título do produto
-#     # titulo = produto.find('h2', attrs={'class': 'ui-search-item__title'})
-#     # print('Título do produto:', titulo.text)
+for produto in produtos:
+    # Incrementa o contador
+    i += 1
 
-#     # # Encontra e imprime o id do produto
-#     # id = site.find('section', attrs={'class': '_blank'})
-#     # print('Id do produto:', id.get('id'))
-    
-#      # Encontra e imprime o link do produto
-#     link = site.find('a', attrs={'class': 'multi--container--1UZxxHY cards--card--3PJxwBm search-card-item'})
-#     print('Link do produto:', link['href'])
-    
-#      Encontra e imprime o preço do produto (considerando centavos)
-#     valor = produto.find('span', attrs={'class': 'a2g0o.productlist.main.i2.52945fe7XFQBdO'})
-#     print('Preço do produto: R$', valor.text)
+    # Extrai informações do produto
+    link = produto.find('a', class_='multi--container--1UZxxHY cards--card--3PJxwBm search-card-item')
+    titulo = produto.find('h1', class_='multi--titleText--nXeOvyr')
+    valor = produto.find('div', class_='multi--price-sale--U-S0jtj')
 
-#     # Imprime o contador
-#     print('Contador para quantidade de produtos encontrados:', i)
-    
-#     # Adiciona linhas em branco para melhorar a legibilidade
-#     print('\n\n')
+    # Imprime informações do produto
+    link = link['href']
+    print('Link do produto:', link)
 
+    titulo = titulo.text
+    print('Título do produto:', titulo)
 
+    valor = valor.text
+    print('Preço do produto: R$', valor)
+
+    # Extrai o ID do produto da URL usando expressão regular
+    id = re.search(r'/(\d+).html', link)
+
+    # Verificar se o ID foi encontrado
+    if id:
+        id = id.group(1)
+        print('ID do produto:', id)
+    else:
+        print('ID do produto não encontrado na URL.')
+
+    print('Contador para quantidade de produtos encontrados:', i)
+    print('\n\n')
+
+# Fechar o navegador controlado pelo Selenium
+driver.quit()
