@@ -1,8 +1,6 @@
 # Imports
 import requests
 from bs4 import BeautifulSoup
-
-import database.comparisons as cp
 import database.operations as op
 
 def get_product_ml():
