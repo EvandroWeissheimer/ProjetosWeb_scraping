@@ -38,7 +38,6 @@ def montaTela():
     root.mainloop()
 
 
-# def mercadoLivre():
-#     teste = produto.get()
-#     return teste
-
+def mercadoLivre():
+    teste = produto.get()
+    return teste
