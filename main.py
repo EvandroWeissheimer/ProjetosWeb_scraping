@@ -58,7 +58,7 @@ def get_product_ml():
         # Adiciona linhas em branco para melhorar a legibilidade
         print('\n\n')
         # send_message_to_telegram(str(produto))
-        asyncio.run(send_message_to_telegram(str(link['href'])))
+        asyncio.run(send_message_to_telegram(titulo.text + '\n'  + str(link['href'] + '\n' + centavos.text)))
 
 async def send_message_to_telegram(text):
     bot = Bot(token='6930586463:AAHIykB3XYJzAIAclpWA9RKVRMg0IcNXOSk')
