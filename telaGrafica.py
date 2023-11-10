@@ -35,6 +35,8 @@ def montaTela():
     # ttk.Button(mainframe, text="Aliexpress",  command=enviarMensagem).grid(column=1, row=6, sticky=tk.W)
     ttk.Button(mainframe, text="Sair", command=root.destroy).grid(column=1, row=7, sticky=tk.W)
 
+    
+
     root.mainloop()
 
 
