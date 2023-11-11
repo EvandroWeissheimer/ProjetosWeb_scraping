@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 import tkinter as tk
 
-from main import get_product_ml
+from mercado_livre import get_product_ml
 
 def montaTela():
     global selected_var
