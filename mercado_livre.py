@@ -3,11 +3,25 @@ import requests
 from bs4 import BeautifulSoup
 import database.operations as op
 
+from tkinter import *
+from tkinter import ttk, filedialog, messagebox
+import tkinter as tk
+
+import telaGrafica as tg
+
+from telegram import Bot 
+import asyncio
+
+
 def get_product_ml():
     # Melhorias pelo oq eu testei so mostra a primeira pagina com os produtos tem que tentar fazer um jeito de passar as paginas
     url_base = 'https://lista.mercadolivre.com.br/'
 
+<<<<<<< HEAD:mercado_livre.py
     produto_nome = "notebook i5"  # Nome do produto a ser pesquisado
+=======
+    produto_nome = tg.mercadoLivre() # Nome do produto a ser pesquisado
+>>>>>>> origin/ogliari:main.py
 
     # Faz uma requisição HTTP para obter a página HTML
     response = requests.get(url_base + produto_nome) # https://lista.mercadolivre.com.br/ + o produto
@@ -50,7 +64,13 @@ def get_product_ml():
         
         # Adiciona linhas em branco para melhorar a legibilidade
         print('\n\n')
+        # send_message_to_telegram(str(produto))
+        asyncio.run(send_message_to_telegram(titulo.text + '\n'  + str(link['href'] + '\n' + centavos.text)))
 
+async def send_message_to_telegram(text):
+    bot = Bot(token='6930586463:AAHIykB3XYJzAIAclpWA9RKVRMg0IcNXOSk')
+    await bot.send_message(chat_id='5782098350', text=text)
 
 if __name__ == "__main__":
-    get_product_ml()
+    tg.montaTela()
+    
