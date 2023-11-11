@@ -61,6 +61,8 @@ def get_data():
             valor = valor.text.strip()  # Remove espaços em branco extras
             print(f'Preço do produto: R$ {valor}')
 
+            asyncio.run(send_message_to_telegram(str(titulo) + '\n' + link + '\n' + valor))
+
             # Extrai o ID do produto da URL usando expressão regular
             id = re.search(r'/(\d+).html', link)
             if id:
@@ -104,7 +106,6 @@ def get_data():
         url_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}/{pagina}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
         contador = extrair_dados_pagina(url_pagina, contador)
 
-        asyncio.run(send_message_to_telegram(str(produto_nome_origem) + '\n' + url_pagina))
 
     # Fechar o navegador controlado pelo Selenium
     driver.quit()
