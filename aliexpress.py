@@ -92,8 +92,8 @@ def get_data():
     url_base = 'https://pt.aliexpress.com/w/wholesale-.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
 
     # produto_nome = 'placa de video' # produto pra busca
-    produto_nome = tg.mercadoLivre() # produto pra busca
-    produto_nome = produto_nome.replace(" ", "-")
+    produto_nome_origem = tg.mercadoLivre() # produto pra busca
+    produto_nome = produto_nome_origem.replace(" ", "-")
 
     # url da primeira página
     url_primeira_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
@@ -101,10 +101,10 @@ def get_data():
 
 
     for pagina in range(10, 61, 10): # coleta dados das páginas subsequentes (de 10 em 10 até 60)
-        url_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}-8g/{pagina}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
+        url_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}/{pagina}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
         contador = extrair_dados_pagina(url_pagina, contador)
 
-        asyncio.run(send_message_to_telegram(str(produto_nome) + '\n' + url_pagina))
+        asyncio.run(send_message_to_telegram(str(produto_nome_origem) + '\n' + url_pagina))
 
     # Fechar o navegador controlado pelo Selenium
     driver.quit()
