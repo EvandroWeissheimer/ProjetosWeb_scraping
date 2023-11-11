@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 import tkinter as tk
 
 from mercado_livre import get_product_ml
+from aliexpress import get_data
 
 def montaTela():
     global selected_var
@@ -32,7 +33,7 @@ def montaTela():
     produto.grid(column=1, row=4, sticky=tk.EW)
     # ttk.Button(mainframe, text="Criar Contado",  command=telaCadastro).grid(column=1, row=7, sticky=tk.W)
     ttk.Button(mainframe, text="Merca Livre", command=get_product_ml).grid(column=1, row=5, sticky=tk.W)
-    # ttk.Button(mainframe, text="Aliexpress",  command=enviarMensagem).grid(column=1, row=6, sticky=tk.W)
+    ttk.Button(mainframe, text="Aliexpress",  command=get_data).grid(column=1, row=6, sticky=tk.W)
     ttk.Button(mainframe, text="Sair", command=root.destroy).grid(column=1, row=7, sticky=tk.W)
 
     

@@ -10,6 +10,14 @@ from selenium.common.exceptions import TimeoutException  # Exceção para timeou
 import re  # Módulo para expressões regulares
 import database.operations as op
 
+import graphic_screen as tg
+
+from telegram import Bot
+import asyncio
+
+
+
+
 
 def get_data():
     # Função para extrair dados de uma página
@@ -83,10 +91,12 @@ def get_data():
     # URL base do ali
     url_base = 'https://pt.aliexpress.com/w/wholesale-.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
 
-    produto_nome = 'placa de video' # produto pra busca
+    # produto_nome = 'placa de video' # produto pra busca
+    produto_nome = tg.mercadoLivre() # produto pra busca
+    produto_nome = produto_nome.replace(" ", "-")
 
     # url da primeira página
-    url_primeira_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}-8g.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
+    url_primeira_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
     contador = extrair_dados_pagina(url_primeira_pagina, contador)
 
 
@@ -94,8 +104,14 @@ def get_data():
         url_pagina = f'https://pt.aliexpress.com/w/wholesale-{produto_nome}-8g/{pagina}.html?spm=a2g0o.home.auto_suggest.2.53451c912VxIl7'
         contador = extrair_dados_pagina(url_pagina, contador)
 
+        asyncio.run(send_message_to_telegram(str(produto_nome) + '\n' + url_pagina))
+
     # Fechar o navegador controlado pelo Selenium
     driver.quit()
+
+async def send_message_to_telegram(text):
+    bot = Bot(token='6930586463:AAHIykB3XYJzAIAclpWA9RKVRMg0IcNXOSk')
+    await bot.send_message(chat_id='-1002114023473', text=text)
 
 if __name__ == "__main__":
     get_data()

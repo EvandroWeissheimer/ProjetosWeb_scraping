@@ -11,12 +11,15 @@ import graphic_screen as tg
 
 from telegram import Bot
 import asyncio
+import time
+
+# from graphic_screen import mercadoLivre
 
 def get_product_ml():
     # Melhorias pelo oq eu testei so mostra a primeira pagina com os produtos tem que tentar fazer um jeito de passar as paginas
     url_base = 'https://lista.mercadolivre.com.br/'
 
-    produto_nome = "notebook i5"  # Nome do produto a ser pesquisado
+    produto_nome = 'i5' # Nome do produto a ser pesquisado
 
     # Faz uma requisição HTTP para obter a página HTML
     response = requests.get(url_base + produto_nome) # https://lista.mercadolivre.com.br/ + o produto
@@ -64,7 +67,8 @@ def get_product_ml():
 
 async def send_message_to_telegram(text):
     bot = Bot(token='6930586463:AAHIykB3XYJzAIAclpWA9RKVRMg0IcNXOSk')
-    await bot.send_message(chat_id='5782098350', text=text)
+    await bot.send_message(chat_id='-1002114023473', text=text)
+    # time.sleep(33)  # Espera 33 segundos antes de enviar a próxima mensagem
 
 if __name__ == "__main__":
     tg.montaTela()
